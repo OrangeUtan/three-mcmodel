@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+flycheck_*
+\#*
+*~
+*.*~
+.yo-rc.json
+/dist/
+/.nyc_output
+/coverage.lcov
+/scratch
+/secrets
+browser_test
