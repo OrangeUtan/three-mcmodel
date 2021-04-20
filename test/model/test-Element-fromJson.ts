@@ -49,7 +49,7 @@ test('"from" is invalid', (t) => {
                 to: [2, 2, 2],
                 faces: {},
             }),
-        { instanceOf: ModelParseError, message: 'Invalid Vec3: [1,1,1,1,1]' },
+        { instanceOf: ModelParseError, message: 'Invalid Vector3: [1,1,1,1,1]' },
     )
 })
 
@@ -75,7 +75,7 @@ test('"to" is invalid', (t) => {
                 to: [2],
                 faces: {},
             }),
-        { instanceOf: ModelParseError, message: 'Invalid Vec3: [2]' },
+        { instanceOf: ModelParseError, message: 'Invalid Vector3: [2]' },
     )
 })
 

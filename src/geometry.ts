@@ -1,106 +1,108 @@
-import * as THREE from 'three'
-import { Float32BufferAttribute, Uint16BufferAttribute } from 'three'
+import { Float32BufferAttribute, Uint16BufferAttribute, Vector3, Vector4, Matrix3, BufferGeometry } from 'three'
 import {
     ElementRotation,
     FaceType,
     MinecraftModel,
     RotationAxis,
     TextureRotationAngle,
-    Vec3,
-    Vec4,
 } from './model'
 
 const faceVertexIndicesMap: {
-    [type in FaceType]: Vec4
+    [type in FaceType]: Vector4
 } = {
-    west: [0, 1, 2, 3],
-    east: [4, 5, 6, 7],
-    down: [0, 3, 4, 7],
-    up: [2, 1, 6, 5],
-    north: [7, 6, 1, 0],
-    south: [3, 2, 5, 4],
+    west: new Vector4(0, 1, 2, 3),
+    east: new Vector4(4, 5, 6, 7),
+    down: new Vector4(0, 3, 4, 7),
+    up: new Vector4(2, 1, 6, 5),
+    north: new Vector4(7, 6, 1, 0),
+    south: new Vector4(3, 2, 5, 4),
 }
 
 function buildRotationMatrix(angle: number, scale: number, axis: RotationAxis) {
     const a = Math.cos(angle) * scale
     const b = Math.sin(angle) * scale
-    const matrix = new THREE.Matrix3()
 
     switch (axis) {
         case RotationAxis.X:
-            matrix.set(1, 0, 0, 0, a, -b, 0, b, a)
-            break
+            return new Matrix3().set(
+                1, 0, 0,
+                0, a, -b,
+                0, b, a
+            )
         case RotationAxis.Y:
-            matrix.set(a, 0, b, 0, 1, 0, -b, 0, a)
-            break
+            return new Matrix3().set(
+                a, 0, b,
+                0, 1, 0,
+                -b, 0, a
+            )
         case RotationAxis.Z:
-            matrix.set(a, -b, 0, b, a, 0, 0, 0, 1)
-            break
+            return new Matrix3().set(
+                a, -b, 0,
+                b, a, 0,
+                0, 0, 1
+            )
     }
-
-    return matrix
 }
 
 function rotateFaceVertexIndices(
-    vertexIndices: Vec4,
+    vertexIndices: Vector4,
     angle: TextureRotationAngle,
-) {
-    const [a, b, c, d] = vertexIndices
+): Vector4 {
+    const [a, b, c, d] = vertexIndices.toArray()
 
     switch (angle) {
         case 0:
-            return [a, b, c, d]
+            return new Vector4(a, b, c, d)
         case 90:
-            return [b, c, d, a]
+            return new Vector4(b, c, d, a)
         case 180:
-            return [c, d, a, b]
+            return new Vector4(c, d, a, b)
         case 270:
-            return [d, a, b, c]
+            return new Vector4(d, a, b, c)
     }
 }
 
-function getDefaultUVs(faceType: FaceType, from: Vec3, to: Vec3): Vec4 {
-    const [x1, y1, z1] = from
-    const [x2, y2, z2] = to
+function getDefaultUVs(faceType: FaceType, from: Vector3, to: Vector3): Vector4 {
+    const [x1, y1, z1] = from.toArray()
+    const [x2, y2, z2] = to.toArray()
 
     switch (faceType) {
         case FaceType.WEST:
-            return [z1, 16 - y2, z2, 16 - y1]
+            return new Vector4(z1, 16 - y2, z2, 16 - y1)
         case FaceType.EAST:
-            return [16 - z2, 16 - y2, 16 - z1, 16 - y1]
+            return new Vector4(16 - z2, 16 - y2, 16 - z1, 16 - y1)
         case FaceType.DOWN:
-            return [x1, 16 - z2, x2, 16 - z1]
+            return new Vector4(x1, 16 - z2, x2, 16 - z1)
         case FaceType.UP:
-            return [x1, z1, x2, z2]
+            return new Vector4(x1, z1, x2, z2)
         case FaceType.NORTH:
-            return [16 - x2, 16 - y2, 16 - x1, 16 - y1]
+            return new Vector4(16 - x2, 16 - y2, 16 - x1, 16 - y1)
         case FaceType.SOUTH:
-            return [x1, 16 - y2, x2, 16 - y1]
+            return new Vector4(x1, 16 - y2, x2, 16 - y1)
     }
 }
 
-function normalizedUVs(uvs: Vec4) {
-    return uvs.map((coord, i) => (i % 2 ? 16 - coord : coord) / 16) as Vec4
+function normalizedUVs(uvs: Vector4): Vector4 {
+    return new Vector4().fromArray(uvs.toArray().map((coord, i) => (i % 2 ? 16 - coord : coord) / 16))
 }
 
-function getCubeCornerVertices(from: Vec3, to: Vec3) {
-    const [x1, y1, z1, x2, y2, z2] = from.concat(to).map((coord) => coord - 8)
+function getCubeCornerVertices(from: Vector3, to: Vector3): Vector3[] {
+    let [x1, y1, z1] = from.toArray()
+    let [x2, y2, z2] = to.toArray()
 
     return [
-        [x1, y1, z1],
-        [x1, y2, z1],
-        [x1, y2, z2],
-        [x1, y1, z2],
-        [x2, y1, z2],
-        [x2, y2, z2],
-        [x2, y2, z1],
-        [x2, y1, z1],
-    ] as Vec3[]
+        new Vector3(x1, y1, z1),
+        new Vector3(x1, y2, z1),
+        new Vector3(x1, y2, z2),
+        new Vector3(x1, y1, z2),
+        new Vector3(x2, y1, z2),
+        new Vector3(x2, y2, z2),
+        new Vector3(x2, y2, z1),
+        new Vector3(x2, y1, z1),
+    ]
 }
 
-function rotateCubeCornerVertices(vertices: Vec3[], rotation: ElementRotation) {
-    const origin = new THREE.Vector3().fromArray(rotation.origin).subScalar(8)
-
+function rotateCubeCornerVertices(vertices: Vector3[], rotation: ElementRotation): Vector3[] {
     const angle = (rotation.angle / 180) * Math.PI
     const scale =
         rotation.rescale === true
@@ -109,13 +111,11 @@ function rotateCubeCornerVertices(vertices: Vec3[], rotation: ElementRotation) {
     const rotationMatrix = buildRotationMatrix(angle, scale, rotation.axis)
 
     return vertices.map((vertex) =>
-        new THREE.Vector3()
-            .fromArray(vertex)
-            .sub(origin)
+        vertex
+            .sub(rotation.origin)
             .applyMatrix3(rotationMatrix)
-            .add(origin)
-            .toArray(),
-    ) as Vec3[]
+            .add(rotation.origin)
+    )
 }
 
 interface MaterialGroupAttributes {
@@ -184,7 +184,7 @@ class MaterialGroupAttributesBuilder {
     }
 }
 
-export class MinecraftModelGeometry extends THREE.BufferGeometry {
+export class MinecraftModelGeometry extends BufferGeometry {
     constructor(model: MinecraftModel) {
         super()
 
@@ -196,7 +196,7 @@ export class MinecraftModelGeometry extends THREE.BufferGeometry {
         } = MinecraftModelGeometry.computeAttributes(model)
         this.setAttribute(
             'position',
-            new THREE.Float32BufferAttribute(vertices, 3),
+            new Float32BufferAttribute(vertices, 3),
         )
         this.setAttribute('uv', new Float32BufferAttribute(uvs, 2))
         this.setIndex(new Uint16BufferAttribute(indices, 1))
@@ -210,7 +210,7 @@ export class MinecraftModelGeometry extends THREE.BufferGeometry {
      * Compute geometry attributes from Minecraft model
      */
     public static computeAttributes(model: MinecraftModel) {
-        const builder = new MaterialGroupAttributesBuilder(model.textures)
+        const builder = new MaterialGroupAttributesBuilder(model.textures!)
 
         for (const elem of model.elements || []) {
             let cornerVertices = getCubeCornerVertices(elem.from, elem.to)
@@ -220,6 +220,10 @@ export class MinecraftModelGeometry extends THREE.BufferGeometry {
                     elem.rotation,
                 )
             }
+
+            cornerVertices.forEach(v => {
+                v.sub(new Vector3(8, 0, 8))
+            })
 
             Object.entries(elem.faces).forEach(([faceType, face]) => {
                 if (face === undefined) {
@@ -234,15 +238,14 @@ export class MinecraftModelGeometry extends THREE.BufferGeometry {
 
                 for (const index of rotateFaceVertexIndices(
                     faceVertexIndicesMap[faceType as FaceType],
-                    face.rotation || 0,
-                )) {
-                    group.vertices.push(...cornerVertices[index]!)
+                    face.rotation ?? 0).toArray()
+                ) {
+                    group.vertices.push(...cornerVertices[index]!.toArray())
                 }
 
-                const faceUVs =
-                    face.uv ||
-                    getDefaultUVs(faceType as FaceType, elem.from, elem.to)
-                const [u1, v1, u2, v2] = normalizedUVs(faceUVs)
+                const faceUVs = face.uv ?? getDefaultUVs(faceType as FaceType, elem.from, elem.to)
+
+                const [u1, v1, u2, v2] = normalizedUVs(faceUVs).toArray()
 
                 group.uvs.push(u1, v2)
                 group.uvs.push(u1, v1)

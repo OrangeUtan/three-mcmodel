@@ -1,6 +1,7 @@
 // Types for minecraft json models (see https://minecraft.fandom.com/wiki/Model)
 
-import { isObject, clamp } from './utils'
+import { isObject } from './utils'
+import { Vector3, Vector4} from 'three'
 
 export class ModelParseError extends Error {
     constructor(msg?: string) {
@@ -10,29 +11,15 @@ export class ModelParseError extends Error {
     }
 }
 
-export type Vec3 = [number, number, number]
-export function validateVec3(vec: any): vec is Vec3 {
+export function validateVector(vec: any, size: number) {
     if (
         Array.isArray(vec) &&
-        vec.length === 3 &&
+        vec.length === size &&
         vec.every((coord) => typeof coord === 'number')
     ) {
         return true
     } else {
-        throw new ModelParseError('Invalid Vec3: ' + JSON.stringify(vec))
-    }
-}
-
-export type Vec4 = [number, number, number, number]
-export function validateVec4(vec: any): vec is Vec4 {
-    if (
-        Array.isArray(vec) &&
-        vec.length === 4 &&
-        vec.every((coord) => typeof coord === 'number')
-    ) {
-        return true
-    } else {
-        throw new ModelParseError('Invalid Vec4: ' + JSON.stringify(vec))
+        throw new ModelParseError(`Invalid Vector${size}: ${JSON.stringify(vec)}`)
     }
 }
 
@@ -52,7 +39,7 @@ export class Face {
 
     constructor(
         public texture: string,
-        public uv?: Vec4,
+        public uv?: Vector4,
         public cullface?: FaceType,
         rotation?: TextureRotationAngle,
         public tintindex?: number,
@@ -78,7 +65,7 @@ export class Face {
         }
 
         if (json.uv != null) {
-            validateVec4(json.uv)
+            validateVector(json.uv, 4)
         }
 
         if (
@@ -107,7 +94,7 @@ export class Face {
 
         return new Face(
             json.texture,
-            json.uv,
+            json.uv != null ? new Vector4().fromArray(json.uv) : undefined,
             json.cullface,
             json.rotation,
             json.tintindex,
@@ -127,16 +114,14 @@ export enum DisplayPosition {
 }
 
 export class Display {
-    public rotation: Vec3
-    public translation: Vec3
-    public scale: Vec3
+    public rotation: Vector3
+    public translation: Vector3
+    public scale: Vector3
 
-    constructor(rotation?: Vec3, translation?: Vec3, scale?: Vec3) {
-        this.rotation = rotation ?? [0, 0, 0]
-        this.translation = (translation?.map((n) =>
-            clamp(n, -80, 80),
-        ) as Vec3) ?? [0, 0, 0]
-        this.scale = (scale?.map((n) => clamp(n, 0, 4)) as Vec3) ?? [1, 1, 1]
+    constructor(rotation?: Vector3, translation?: Vector3, scale?: Vector3) {
+        this.rotation = rotation ?? new Vector3(0, 0, 0)
+        this.translation = translation?.clampScalar(-80, 80) ?? new Vector3(0, 0, 0)
+        this.scale = scale?.clampScalar(0, 4) ?? new Vector3(1, 1, 1)
     }
 
     static fromJson(json: any) {
@@ -147,16 +132,20 @@ export class Display {
         }
 
         if (json.rotation != null) {
-            validateVec3(json.rotation)
+            validateVector(json.rotation, 3)
         }
         if (json.translation != null) {
-            validateVec3(json.translation)
+            validateVector(json.translation, 3)
         }
         if (json.scale != null) {
-            validateVec3(json.scale)
+            validateVector(json.scale, 3)
         }
 
-        return new Display(json.rotation, json.translation, json.scale)
+        return new Display(
+            json.rotation != null ? new Vector3().fromArray(json.rotation) : undefined,
+            json.translation != null ? new Vector3().fromArray(json.translation) : undefined,
+            json.scale != null ? new Vector3().fromArray(json.scale) : undefined
+        )
     }
 }
 
@@ -172,7 +161,7 @@ export class ElementRotation {
     public rescale: boolean
 
     constructor(
-        public origin: Vec3,
+        public origin: Vector3,
         public angle: number,
         public axis: RotationAxis,
         rescale?: boolean,
@@ -195,7 +184,7 @@ export class ElementRotation {
             }
         }
 
-        validateVec3(json.origin)
+        validateVector(json.origin, 3)
 
         if (![-45, -22.5, 0, 22.5, 45].includes(json.angle)) {
             throw new ModelParseError(
@@ -217,7 +206,7 @@ export class ElementRotation {
         }
 
         return new ElementRotation(
-            json.origin,
+            new Vector3().fromArray(json.origin),
             json.angle,
             json.axis,
             json.rescale,
@@ -229,8 +218,8 @@ export class Element {
     public shade: boolean
 
     constructor(
-        public from: Vec3,
-        public to: Vec3,
+        public from: Vector3,
+        public to: Vector3,
         public faces: { [name in FaceType]?: Face },
         public rotation?: ElementRotation,
         shade?: boolean,
@@ -253,8 +242,8 @@ export class Element {
             }
         }
 
-        validateVec3(json.from)
-        validateVec3(json.to)
+        validateVector(json.from, 3)
+        validateVector(json.to, 3)
 
         let faces: { [name in FaceType]?: Face } | undefined = undefined
         if (json.faces == null) {
@@ -286,7 +275,13 @@ export class Element {
             )
         }
 
-        return new Element(json.from, json.to, json.faces, rotation, json.shade)
+        return new Element(
+            new Vector3().fromArray(json.from),
+            new Vector3().fromArray(json.to),
+            faces,
+            rotation,
+            json.shade
+        )
     }
 }
 

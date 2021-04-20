@@ -46,7 +46,7 @@ test('invalid "uv"', (t) => {
             }),
         {
             instanceOf: ModelParseError,
-            message: 'Invalid Vec4: ' + JSON.stringify([1, 2, 3]),
+            message: 'Invalid Vector4: ' + JSON.stringify([1, 2, 3]),
         },
     )
 })

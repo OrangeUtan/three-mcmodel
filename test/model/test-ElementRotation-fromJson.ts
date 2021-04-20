@@ -72,7 +72,7 @@ test('invalid "origin"', (t) => {
                 angle: 22.5,
                 axis: 'y',
             }),
-        { instanceOf: ModelParseError, message: 'Invalid Vec3: [1,1]' },
+        { instanceOf: ModelParseError, message: 'Invalid Vector3: [1,1]' },
     )
 })
 

@@ -26,7 +26,7 @@ test('"rotation" is invalid', (t) => {
             Display.fromJson({
                 rotation: [1, 2],
             }),
-        { instanceOf: ModelParseError, message: 'Invalid Vec3: [1,2]' },
+        { instanceOf: ModelParseError, message: 'Invalid Vector3: [1,2]' },
     )
 })
 
@@ -36,7 +36,7 @@ test('"translation" is invalid', (t) => {
             Display.fromJson({
                 translation: [1, 2],
             }),
-        { instanceOf: ModelParseError, message: 'Invalid Vec3: [1,2]' },
+        { instanceOf: ModelParseError, message: 'Invalid Vector3: [1,2]' },
     )
 })
 
@@ -46,6 +46,6 @@ test('"scale" is invalid', (t) => {
             Display.fromJson({
                 scale: [1, 2],
             }),
-        { instanceOf: ModelParseError, message: 'Invalid Vec3: [1,2]' },
+        { instanceOf: ModelParseError, message: 'Invalid Vector3: [1,2]' },
     )
 })
