@@ -31,9 +31,9 @@ export class MinecraftModelMesh extends Mesh {
         }
     }
 
-    public updateAnimation(timeDelta: number) {
-        for (const texture of Object.values(this.textureToMaterialMap)) {
-            ;(texture.map as MinecraftTexture).updateAnimation(timeDelta)
+    public setAnimationFrame(index: number) {
+        for(const texture of Object.values(this.textureToMaterialMap)) {
+            (texture.map as MinecraftTexture).setAnimationFrame(index);
         }
     }
 }

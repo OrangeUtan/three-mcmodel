@@ -5,9 +5,8 @@ export const CHECKERBOARD_IMAGE = new THREE.ImageLoader().load(
 )
 
 export class MinecraftTexture extends THREE.Texture {
-    private currentTileIdx = 0
+    private tileIdx = 0
     private numTiles = 1
-    private currentTileDisplayTime = 0
 
     constructor(image = CHECKERBOARD_IMAGE) {
         super(image)
@@ -21,22 +20,14 @@ export class MinecraftTexture extends THREE.Texture {
 
         this.numTiles = numTiles
         this.repeat.set(1, 1 / numTiles)
-        this.currentTileIdx = 0
-        this.currentTileDisplayTime = 0
+        this.tileIdx = 0
 
         this.needsUpdate = true
     }
 
-    updateAnimation(timeDelta: number) {
-        if (this.numTiles > 1) {
-            this.currentTileDisplayTime += timeDelta
-
-            while (this.currentTileDisplayTime > 500) {
-                this.currentTileDisplayTime -= 500
-                this.currentTileIdx = this.currentTileIdx + (1 % this.numTiles)
-                this.offset.y = this.currentTileIdx / this.numTiles
-            }
-        }
+    setAnimationFrame(index: number) {
+        this.tileIdx = index % this.numTiles
+        this.offset.y = this.tileIdx / this.numTiles
     }
 }
 
