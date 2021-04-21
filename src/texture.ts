@@ -43,42 +43,24 @@ export class MinecraftTexture extends THREE.Texture {
 export class MinecraftTextureLoader extends THREE.Loader {
     public crossOrigin = 'anonymous'
 
-    public load(
-        url: string,
-        onLoad?: (texture: MinecraftTexture) => void,
-        onProgress?: (request: ProgressEvent) => void,
-        onError?: (error: any) => void,
-    ) {
+    public async load(url: string) {
         const texture = new MinecraftTexture()
 
         if (url == null) {
             return texture
         }
 
-        const handleLoad = (image: HTMLImageElement) => {
-            if (!this.hasValidDimensions(image)) {
-                if (onError) {
-                    onError(
-                        new Error(
-                            `Invalid image dimensions: ${image.height}x${image.width}`,
-                        ),
-                    )
-                }
-                return
-            }
-
-            const numTiles = image.height / image.width
-            texture.set(image, numTiles)
-
-            if (onLoad) {
-                onLoad(texture)
-            }
-        }
-
         const loader = new THREE.ImageLoader(this.manager)
         loader.setCrossOrigin(this.crossOrigin)
         loader.setPath(this.path)
-        loader.load(url, handleLoad, onProgress, onError)
+
+        const image = await loader.loadAsync(url)
+        if (!this.hasValidDimensions(image)) {
+            throw new Error(`Invalid image dimensions: ${image.height}x${image.width}`)
+        }
+
+        const numTiles = image.height / image.width
+        texture.set(image, numTiles)
 
         return texture
     }

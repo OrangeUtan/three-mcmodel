@@ -1,7 +1,7 @@
 // Types for minecraft json models (see https://minecraft.fandom.com/wiki/Model)
 
 import { isObject } from './utils'
-import { Vector3, Vector4} from 'three'
+import { Vector3, Vector4, Loader, FileLoader } from 'three'
 
 export class ModelParseError extends Error {
     constructor(msg?: string) {
@@ -380,5 +380,16 @@ export class MinecraftModel {
             displayPositions,
             json.ambientocclusion,
         )
+    }
+}
+
+export class MinecraftModelLoader extends Loader {
+    public async load(url: string) {
+        const loader = new FileLoader(this.manager)
+        loader.setPath(this.path)
+        loader.setResponseType('json')
+
+        const data = await loader.loadAsync(url)
+        return MinecraftModel.fromJson(data)
     }
 }

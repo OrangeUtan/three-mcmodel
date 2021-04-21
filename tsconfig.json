@@ -11,6 +11,10 @@
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
+    "lib": [
+      "es6",
+      "dom"
+    ],
     "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
