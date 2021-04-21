@@ -9,8 +9,8 @@ export class MinecraftTexture extends THREE.Texture {
     private numTiles = 1
     private currentTileDisplayTime = 0
 
-    constructor() {
-        super(CHECKERBOARD_IMAGE)
+    constructor(image = CHECKERBOARD_IMAGE) {
+        super(image)
         this.magFilter = this.minFilter = THREE.NearestFilter
         this.wrapT = THREE.RepeatWrapping
         this.needsUpdate = true
@@ -39,6 +39,8 @@ export class MinecraftTexture extends THREE.Texture {
         }
     }
 }
+
+export const MISSING_TEXTURE = new MinecraftTexture()
 
 export class MinecraftTextureLoader extends THREE.Loader {
     public crossOrigin = 'anonymous'

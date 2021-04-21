@@ -2,18 +2,17 @@ import { Mesh } from 'three'
 import { MinecraftModelGeometry } from './geometry'
 import { MinecraftModelMaterial } from './material'
 import { MinecraftModel } from './model'
-import { MinecraftTexture } from './texture'
+import { MISSING_TEXTURE, MinecraftTexture } from './texture'
 
-type TextureToMaterialMap = { [texturePath: string]: MinecraftModelMaterial }
 
 export class MinecraftModelMesh extends Mesh {
-    private textureToMaterialMap: TextureToMaterialMap
+    private textureToMaterialMap: { [texturePath: string]: MinecraftModelMaterial }
 
     constructor(model: MinecraftModel) {
         const geometry = new MinecraftModelGeometry(model)
 
         const texturePaths = [...new Set(Object.values(model.textures!))].sort()
-        const materialMapping: TextureToMaterialMap = {}
+        const materialMapping: { [texturePath: string]: MinecraftModelMaterial } = {}
         const materials = texturePaths.map(
             (texturePath) =>
                 (materialMapping[texturePath] = new MinecraftModelMaterial()),
@@ -25,10 +24,10 @@ export class MinecraftModelMesh extends Mesh {
     }
 
     public resolveTextures(
-        resolver: (texturePath: string) => MinecraftTexture,
+        resolver: (texturePath: string) => MinecraftTexture | undefined,
     ) {
         for (const texturePath in this.textureToMaterialMap) {
-            this.textureToMaterialMap[texturePath]!.map = resolver(texturePath)
+            this.textureToMaterialMap[texturePath]!.map = resolver(texturePath) ?? MISSING_TEXTURE
         }
     }
 
