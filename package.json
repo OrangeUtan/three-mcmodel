@@ -1,6 +1,6 @@
 {
   "name": "@oran9e/three-mcmodel",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Minecraft model loader for threejs",
   "homepage": "https://github.com/OrangeUtan/three-mcmodel",
   "bugs": {
