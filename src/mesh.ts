@@ -3,6 +3,7 @@ import { MinecraftModelGeometry } from './geometry'
 import { MinecraftModelMaterial } from './material'
 import { MinecraftModel } from './model'
 import { MISSING_TEXTURE, MinecraftTexture } from './texture'
+import { lcm } from './utils'
 
 
 export class MinecraftModelMesh extends Mesh {
@@ -31,9 +32,20 @@ export class MinecraftModelMesh extends Mesh {
         }
     }
 
+    public isAnimated() {
+        return Object.values(this.textureToMaterialMap).map(m => m.map).every(t=> (t as MinecraftTexture | undefined)?.isAnimated())
+    }
+
     public setAnimationFrame(index: number) {
         for(const texture of Object.values(this.textureToMaterialMap)) {
             (texture.map as MinecraftTexture).setAnimationFrame(index);
         }
+    }
+
+    public getAnimationPeriod() {
+        const x = Object.values(this.textureToMaterialMap)
+            .map(m => (m.map as MinecraftTexture)?.numFrames() ?? 1)
+            .reduce((prev, current) => lcm(prev, current), 1)
+        console.log(x);
     }
 }

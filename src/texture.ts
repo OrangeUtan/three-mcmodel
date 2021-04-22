@@ -25,9 +25,17 @@ export class MinecraftTexture extends THREE.Texture {
         this.needsUpdate = true
     }
 
+    isAnimated() {
+        return this.numTiles > 1
+    }
+
     setAnimationFrame(index: number) {
         this.tileIdx = index % this.numTiles
         this.offset.y = this.tileIdx / this.numTiles
+    }
+
+    numFrames() {
+        return this.numTiles
     }
 }
 
