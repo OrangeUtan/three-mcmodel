@@ -43,9 +43,8 @@ export class MinecraftModelMesh extends Mesh {
     }
 
     public getAnimationPeriod() {
-        const x = Object.values(this.textureToMaterialMap)
+        return Object.values(this.textureToMaterialMap)
             .map(m => (m.map as MinecraftTexture)?.numFrames() ?? 1)
             .reduce((prev, current) => lcm(prev, current), 1)
-        console.log(x);
     }
 }
