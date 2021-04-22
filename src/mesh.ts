@@ -33,7 +33,7 @@ export class MinecraftModelMesh extends Mesh {
     }
 
     public isAnimated() {
-        return Object.values(this.textureToMaterialMap).map(m => m.map).every(t=> (t as MinecraftTexture | undefined)?.isAnimated())
+        return Object.values(this.textureToMaterialMap).map(m => m.map).some(t=> (t as MinecraftTexture | undefined)?.isAnimated())
     }
 
     public setAnimationFrame(index: number) {
