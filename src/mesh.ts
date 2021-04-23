@@ -1,7 +1,6 @@
 import { Mesh } from 'three'
 import { MinecraftModelGeometry } from './geometry'
 import { MinecraftModelMaterial } from './material'
-import { MinecraftModel } from './model'
 import { MISSING_TEXTURE, MinecraftTexture } from './texture'
 import { lcm } from './utils'
 
@@ -9,10 +8,8 @@ import { lcm } from './utils'
 export class MinecraftModelMesh extends Mesh {
     private textureToMaterialMap: { [texturePath: string]: MinecraftModelMaterial }
 
-    constructor(model: MinecraftModel) {
-        const geometry = new MinecraftModelGeometry(model)
-
-        const texturePaths = [...new Set(Object.values(model.textures!))].sort()
+    constructor(geometry: MinecraftModelGeometry, textures: {[textureVar: string]: string}) {
+        const texturePaths = [...new Set(Object.values(textures))].sort()
         const materialMapping: { [texturePath: string]: MinecraftModelMaterial } = {}
         const materials = texturePaths.map(
             (texturePath) =>

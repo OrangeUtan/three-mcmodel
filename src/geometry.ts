@@ -1,8 +1,8 @@
 import { Float32BufferAttribute, Uint16BufferAttribute, Vector3, Vector4, Matrix3, BufferGeometry } from 'three'
 import {
+    Element,
     ElementRotation,
     FaceType,
-    MinecraftModel,
     RotationAxis,
     TextureRotationAngle,
 } from './model'
@@ -125,7 +125,7 @@ interface MaterialGroupAttributes {
 }
 
 class MaterialGroupAttributesBuilder {
-    materialGroups: { [texturePath: string]: MaterialGroupAttributes } = {}
+    materialGroups: {[texturePath: string]: MaterialGroupAttributes } = {}
     private textureVarToGroupMap: {
         [variable: string]: MaterialGroupAttributes
     } = {}
@@ -135,7 +135,7 @@ class MaterialGroupAttributesBuilder {
         indices: [],
     }
 
-    constructor(textures: { [textureVar: string]: string }) {
+    constructor(textures: {[textureVar: string]: string}) {
         for (const texturePath of new Set(Object.values(textures))) {
             this.materialGroups[texturePath] = {
                 vertices: [],
@@ -185,19 +185,21 @@ class MaterialGroupAttributesBuilder {
 }
 
 export class MinecraftModelGeometry extends BufferGeometry {
-    constructor(model: MinecraftModel) {
+    constructor(elements: Element[], textures: {[textureVar: string]: string}) {
         super()
+
+        if(elements.length === 0 || Object.keys(textures).length  === 0) {
+            return;
+        }
 
         const {
             vertices,
             uvs,
             indices,
             groups,
-        } = MinecraftModelGeometry.computeAttributes(model)
-        this.setAttribute(
-            'position',
-            new Float32BufferAttribute(vertices, 3),
-        )
+        } = MinecraftModelGeometry.computeAttributes(elements, textures)
+
+        this.setAttribute('position', new Float32BufferAttribute(vertices, 3),)
         this.setAttribute('uv', new Float32BufferAttribute(uvs, 2))
         this.setIndex(new Uint16BufferAttribute(indices, 1))
 
@@ -209,10 +211,10 @@ export class MinecraftModelGeometry extends BufferGeometry {
     /**
      * Compute geometry attributes from Minecraft model
      */
-    public static computeAttributes(model: MinecraftModel) {
-        const builder = new MaterialGroupAttributesBuilder(model.textures!)
+    public static computeAttributes(elements: Element[], textures: {[textureVar: string]: string}) {
+        const builder = new MaterialGroupAttributesBuilder(textures)
 
-        for (const elem of model.elements || []) {
+        for (const elem of elements) {
             let cornerVertices = getCubeCornerVertices(elem.from, elem.to)
             if (elem.rotation != null) {
                 cornerVertices = rotateCubeCornerVertices(
