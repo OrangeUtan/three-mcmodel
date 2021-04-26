@@ -280,10 +280,10 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@oran9e/minecraft-model@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@oran9e/minecraft-model/-/minecraft-model-1.0.0.tgz#3b77099fb05a092f34e48ab8e12702b7939a4abf"
-  integrity sha512-nlqWIW41fRvs96RjIdm2GoUc+RSJ1ITSp7rE4U3dONLNk1BILnzQe6mbf7gDSmin6mhITTUeLmIpKRwyyNJZyg==
+"@oran9e/minecraft-model@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@oran9e/minecraft-model/-/minecraft-model-1.0.1.tgz#421540cea9347cd0149c4c76dde322f5964bf68b"
+  integrity sha512-6x7Dwuao5aj3La4z1HI4FXMC0hX+IJmlB0krpaMj6NXW6NiL1rZiDZcm5LplkFFJdcQZDZoHad2chbL/PNOUZg==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"

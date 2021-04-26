@@ -1,11 +1,5 @@
+import { ElementRotation, FaceType, RotationAxis, TextureRotationAngle, Vec3, Element } from '@oran9e/minecraft-model'
 import { Float32BufferAttribute, Uint16BufferAttribute, Vector3, Vector4, Matrix3, BufferGeometry } from 'three'
-import {
-    Element,
-    ElementRotation,
-    FaceType,
-    RotationAxis,
-    TextureRotationAngle,
-} from './model'
 
 const faceVertexIndicesMap: {
     [type in FaceType]: Vector4
@@ -62,9 +56,9 @@ function rotateFaceVertexIndices(
     }
 }
 
-function getDefaultUVs(faceType: FaceType, from: Vector3, to: Vector3): Vector4 {
-    const [x1, y1, z1] = from.toArray()
-    const [x2, y2, z2] = to.toArray()
+function getDefaultUVs(faceType: FaceType, from: Vec3, to: Vec3): Vector4 {
+    const [x1, y1, z1] = from
+    const [x2, y2, z2] = to
 
     switch (faceType) {
         case FaceType.WEST:
@@ -86,9 +80,9 @@ function normalizedUVs(uvs: Vector4): Vector4 {
     return new Vector4().fromArray(uvs.toArray().map((coord, i) => (i % 2 ? 16 - coord : coord) / 16))
 }
 
-function getCubeCornerVertices(from: Vector3, to: Vector3): Vector3[] {
-    let [x1, y1, z1] = from.toArray()
-    let [x2, y2, z2] = to.toArray()
+function getCubeCornerVertices(from: Vec3, to: Vec3): Vector3[] {
+    let [x1, y1, z1] = from
+    let [x2, y2, z2] = to
 
     return [
         new Vector3(x1, y1, z1),
@@ -110,11 +104,13 @@ function rotateCubeCornerVertices(vertices: Vector3[], rotation: ElementRotation
             : 1
     const rotationMatrix = buildRotationMatrix(angle, scale, rotation.axis)
 
-    return vertices.map((vertex) =>
-        vertex
-            .sub(rotation.origin)
+    return vertices.map((vertex) => {
+        const origin = new Vector3().fromArray(rotation.origin);
+        return vertex
+            .sub(origin)
             .applyMatrix3(rotationMatrix)
-            .add(rotation.origin)
+            .add(origin)
+        }
     )
 }
 
@@ -245,7 +241,7 @@ export class MinecraftModelGeometry extends BufferGeometry {
                     group.vertices.push(...cornerVertices[index]!.toArray())
                 }
 
-                const faceUVs = face.uv ?? getDefaultUVs(faceType as FaceType, elem.from, elem.to)
+                const faceUVs = face.uv != null ? new Vector4().fromArray(face.uv) : getDefaultUVs(faceType as FaceType, elem.from, elem.to)
 
                 const [u1, v1, u2, v2] = normalizedUVs(faceUVs).toArray()
 
