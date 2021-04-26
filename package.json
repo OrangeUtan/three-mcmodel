@@ -11,7 +11,7 @@
     "url": "git+https://github.com/OrangeUtan/three-mcmodel.git"
   },
   "license": "MIT",
-  "author": "Oran9eUtan <Oran9eUtan@gmail.com> (https://github.com/Michael)",
+  "author": "Oran9eUtan <Oran9eUtan@gmail.com>",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "files": [
@@ -36,6 +36,7 @@
     "watch:test": "nodemon -e \"ts json\" -x \"yarn test || true\""
   },
   "dependencies": {
+    "@oran9e/minecraft-model": "^1.0.0",
     "three": "^0.127.0"
   },
   "devDependencies": {
