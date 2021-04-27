@@ -18,7 +18,7 @@ prepare:
 publish:
     - "@semantic-release/npm"
     - path: "@semantic-release/github"
-      assets: ["README.md", "CHANGELOG.md", "LICENSE", "dist"]
+      assets: ["README.md", "CHANGELOG.md", "LICENSE", "dist/*"]
 
 success:
   - "@semantic-release/github"
