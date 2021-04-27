@@ -1,5 +1,12 @@
 Changelog
 
+## [1.1.1](https://github.com/OrangeUtan/three-mcmodel/compare/v1.1.0...v1.1.1) (2021-04-27)
+
+
+### Bug Fixes
+
+* Release did not include dist ([17a693e](https://github.com/OrangeUtan/three-mcmodel/commit/17a693e97d0569820f47584d1cb7aa53c0bd6248))
+
 # [1.1.0](https://github.com/OrangeUtan/three-mcmodel/compare/v1.0.0...v1.1.0) (2021-04-27)
 
 
