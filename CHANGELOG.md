@@ -1,5 +1,12 @@
 Changelog
 
+## [1.1.4](https://github.com/OrangeUtan/three-mcmodel/compare/v1.1.3...v1.1.4) (2021-04-27)
+
+
+### Bug Fixes
+
+* Added tarball again :) ([6f79341](https://github.com/OrangeUtan/three-mcmodel/commit/6f793411f96a2a2881bdeb9daeb186486774c953))
+
 ## [1.1.3](https://github.com/OrangeUtan/three-mcmodel/compare/v1.1.2...v1.1.3) (2021-04-27)
 
 
