@@ -1,5 +1,12 @@
 Changelog
 
+## [1.1.2](https://github.com/OrangeUtan/three-mcmodel/compare/v1.1.1...v1.1.2) (2021-04-27)
+
+
+### Bug Fixes
+
+* Release pointed to wrong main ([12d6dbc](https://github.com/OrangeUtan/three-mcmodel/commit/12d6dbc0b5a4c05aa40d460e5fdcaf08c82b87a3))
+
 ## [1.1.1](https://github.com/OrangeUtan/three-mcmodel/compare/v1.1.0...v1.1.1) (2021-04-27)
 
 
