@@ -180,20 +180,16 @@ class MaterialGroupAttributesBuilder {
     }
 }
 
-export class MinecraftModelGeometry extends BufferGeometry {
-    constructor(elements: Element[], textures: {[textureVar: string]: string}) {
+export class ElementGeometry extends BufferGeometry {
+    constructor(public element: Element, textures: {[textureVar: string]: string}) {
         super()
-
-        if(elements.length === 0 || Object.keys(textures).length  === 0) {
-            return;
-        }
 
         const {
             vertices,
             uvs,
             indices,
             groups,
-        } = MinecraftModelGeometry.computeAttributes(elements, textures)
+        } = ElementGeometry.computeAttributes(element, textures)
 
         this.setAttribute('position', new Float32BufferAttribute(vertices, 3),)
         this.setAttribute('uv', new Float32BufferAttribute(uvs, 2))
@@ -204,54 +200,42 @@ export class MinecraftModelGeometry extends BufferGeometry {
         }
     }
 
-    /**
-     * Compute geometry attributes from Minecraft model
-     */
-    public static computeAttributes(elements: Element[], textures: {[textureVar: string]: string}) {
-        const builder = new MaterialGroupAttributesBuilder(textures)
+    public static computeAttributes(element: Element, textures: {[textureVar: string]: string}) {
+        const builder = new MaterialGroupAttributesBuilder(textures);
 
-        for (const elem of elements) {
-            let cornerVertices = getCubeCornerVertices(elem.from, elem.to)
-            if (elem.rotation != null) {
-                cornerVertices = rotateCubeCornerVertices(
-                    cornerVertices,
-                    elem.rotation,
-                )
-            }
-
-            cornerVertices.forEach(v => {
-                v.sub(new Vector3(8, 0, 8))
-            })
-
-            Object.entries(elem.faces).forEach(([faceType, face]) => {
-                if (face === undefined) {
-                    return
-                }
-
-                const group = builder.getMaterialGroupFor(face.texture)
-
-                const i = group.vertices.length / 3
-                group.indices.push(i, i + 2, i + 1)
-                group.indices.push(i, i + 3, i + 2)
-
-                for (const index of rotateFaceVertexIndices(
-                    faceVertexIndicesMap[faceType as FaceType],
-                    face.rotation ?? 0).toArray()
-                ) {
-                    group.vertices.push(...cornerVertices[index]!.toArray())
-                }
-
-                const faceUVs = face.uv != null ? new Vector4().fromArray(face.uv) : getDefaultUVs(faceType as FaceType, elem.from, elem.to)
-
-                const [u1, v1, u2, v2] = normalizedUVs(faceUVs).toArray()
-
-                group.uvs.push(u1, v2)
-                group.uvs.push(u1, v1)
-                group.uvs.push(u2, v1)
-                group.uvs.push(u2, v2)
-            })
+        let cornerVertices = getCubeCornerVertices(element.from, element.to);
+        if (element.rotation != null) {
+            cornerVertices = rotateCubeCornerVertices(
+                cornerVertices,
+                element.rotation,
+            )
         }
 
-        return builder.getAttributes()
+        Object.entries(element.faces).forEach(([faceType, face]) => {
+            if (face === undefined) {
+                return
+            }
+
+            const group = builder.getMaterialGroupFor(face.texture)
+
+            const i = group.vertices.length / 3
+            group.indices.push(i, i + 2, i + 1)
+            group.indices.push(i, i + 3, i + 2)
+
+            for (const index of rotateFaceVertexIndices(faceVertexIndicesMap[faceType as FaceType],face.rotation ?? 0).toArray()) {
+                group.vertices.push(...cornerVertices[index]!.toArray())
+            }
+
+            const faceUVs = face.uv != null ? new Vector4().fromArray(face.uv) : getDefaultUVs(faceType as FaceType, element.from, element.to);
+
+            const [u1, v1, u2, v2] = normalizedUVs(faceUVs).toArray();
+
+            group.uvs.push(u1, v2);
+            group.uvs.push(u1, v1);
+            group.uvs.push(u2, v1);
+            group.uvs.push(u2, v2);
+        })
+
+        return builder.getAttributes();
     }
 }
