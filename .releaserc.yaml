@@ -17,10 +17,11 @@ prepare:
 
 publish:
     - path: "@semantic-release/npm"
-      npmPublish: true
+      npmPublish: false
       tarballDir: dist
     - path: "@semantic-release/github"
-      assets: dist/*.tgz
+      assets: ["dist/*.tgz", "*.tgz"]
+    - path: "@semantic-release/npm"
 
 success:
   - "@semantic-release/github"
