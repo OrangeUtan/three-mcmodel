@@ -1,5 +1,12 @@
 Changelog
 
+# [1.1.0](https://github.com/OrangeUtan/three-mcmodel/compare/v1.0.0...v1.1.0) (2021-04-27)
+
+
+### Features
+
+* Replaced model mesh in favor of one mesh element ([0014d39](https://github.com/OrangeUtan/three-mcmodel/commit/0014d39cb1be0e2679b74f55d9f1e5a4a0e71c49))
+
 # 1.0.0 (2021-04-27)
 
 
