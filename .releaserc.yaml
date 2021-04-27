@@ -16,9 +16,11 @@ prepare:
       assets: ["CHANGELOG.md"]
 
 publish:
-    - "@semantic-release/npm"
+    - path: "@semantic-release/npm"
+      npmPublish: true
+      tarballDir: dist
     - path: "@semantic-release/github"
-      assets: oran9e-three-mcmodel*.tgz
+      assets: dist/*.tgz
 
 success:
   - "@semantic-release/github"
