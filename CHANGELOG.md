@@ -1,5 +1,12 @@
 Changelog
 
+# [1.2.0](https://github.com/OrangeUtan/three-mcmodel/compare/v1.1.4...v1.2.0) (2021-04-27)
+
+
+### Features
+
+* Added "calculateCommonAnimationPeriod" ([e369fe9](https://github.com/OrangeUtan/three-mcmodel/commit/e369fe94d50401564fdb24da5ec0208201a87842))
+
 ## [1.1.4](https://github.com/OrangeUtan/three-mcmodel/compare/v1.1.3...v1.1.4) (2021-04-27)
 
 
