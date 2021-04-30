@@ -1,5 +1,12 @@
 Changelog
 
+# [1.3.0](https://github.com/OrangeUtan/three-mcmodel/compare/v1.2.0...v1.3.0) (2021-04-30)
+
+
+### Features
+
+* Added MinecraftModelJsonLoader ([cba187d](https://github.com/OrangeUtan/three-mcmodel/commit/cba187d9b20eb71b251ed26e598919cf8a62bce9))
+
 # [1.2.0](https://github.com/OrangeUtan/three-mcmodel/compare/v1.1.4...v1.2.0) (2021-04-27)
 
 
