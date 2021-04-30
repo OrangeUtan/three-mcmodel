@@ -18,3 +18,15 @@ export class MinecraftModelLoader extends Loader {
         return MinecraftModel.fromJson(data as MinecraftModelJson)
     }
 }
+
+export class MinecraftModelJsonLoader extends Loader {
+    public async load(url: string) {
+        const loader = new FileLoader(this.manager)
+        loader.setPath(this.path)
+        loader.setResponseType('json')
+
+        const data = await loader.loadAsync(url)
+        validateMinecraftModelJson(data)
+        return data as MinecraftModelJson
+    }
+}
