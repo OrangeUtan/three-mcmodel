@@ -45,7 +45,7 @@
     "watch:test": "nodemon -e \"ts json\" -x \"yarn test || true\""
   },
   "dependencies": {
-    "@oran9e/minecraft-model": "^1.0.1",
+    "@oran9e/minecraft-model": "^1.1.0",
     "three": "^0.127.0"
   },
   "devDependencies": {
