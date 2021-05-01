@@ -1,5 +1,12 @@
 Changelog
 
+## [1.3.1](https://github.com/OrangeUtan/three-mcmodel/compare/v1.3.0...v1.3.1) (2021-04-30)
+
+
+### Bug Fixes
+
+* Added missing exports ([7d72dab](https://github.com/OrangeUtan/three-mcmodel/commit/7d72dabb8467dc9ad43ab64def027f58500a9ca0))
+
 # [1.3.0](https://github.com/OrangeUtan/three-mcmodel/compare/v1.2.0...v1.3.0) (2021-04-30)
 
 
