@@ -514,10 +514,10 @@
   dependencies:
     "@octokit/openapi-types" "^6.1.1"
 
-"@oran9e/minecraft-model@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@oran9e/minecraft-model/-/minecraft-model-1.2.0.tgz#ddc60d36c5b478a48cbeed7592c5196c0015efcf"
-  integrity sha512-F+EMiCa+IPDNv5/mebGahaszZsDhmi/ErW/o5PZOfiqUOVoDzxNBDlo08BYsC4N8XnvboD5QOAv/0dlIm88yKw==
+"@oran9e/minecraft-model@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@oran9e/minecraft-model/-/minecraft-model-1.3.0.tgz#4db20cf46a925fbafb78c5532508548092040891"
+  integrity sha512-zHgrTRoAjiPuExxNCkF+bHfsemNlDSprahcV8fJi0/AMho2XGUCl+XKdfXZKHnFGnky/U2pLQYJPfFuEw9FK7Q==
 
 "@semantic-release/changelog@^5.0.1":
   version "5.0.1"
