@@ -1,5 +1,12 @@
 Changelog
 
+## [1.3.2](https://github.com/OrangeUtan/three-mcmodel/compare/v1.3.1...v1.3.2) (2021-05-01)
+
+
+### Bug Fixes
+
+* Removed obsolete MinecraftModelLoader ([abc26bf](https://github.com/OrangeUtan/three-mcmodel/commit/abc26bff49d7d2093716bbde12ba5c5496a658f8))
+
 ## [1.3.1](https://github.com/OrangeUtan/three-mcmodel/compare/v1.3.0...v1.3.1) (2021-04-30)
 
 
