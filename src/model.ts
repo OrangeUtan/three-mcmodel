@@ -1,4 +1,4 @@
-// Types for minecraft json models (see https://minecraft.fandom.com/wiki/Model)
+// Types for minecraft json models (see https://minecraft.wiki/w/Model)
 
 import { Loader, FileLoader } from 'three'
 import { MinecraftModel, validateMinecraftModelJson, MinecraftModelJson } from '@oran9e/minecraft-model'
